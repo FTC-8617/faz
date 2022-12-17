@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name = "org.firstinspires.ftc.teamcode.Kamikaze", preselectTeleOp = "org.firstinspires.ftc.teamcode.Kamikaze")
+@Autonomous(name = "Kamikaze", preselectTeleOp = "MECHANUM")
 public class Kamikaze extends LinearOpMode {
 
   private DcMotor BackrightAsDcMotor = null;

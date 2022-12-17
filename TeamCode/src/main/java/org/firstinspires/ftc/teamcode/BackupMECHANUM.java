@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-@TeleOp(name="org.firstinspires.ftc.teamcode.BackupMECHANUM", group="TeleOp")
+@TeleOp(name="BackupMECHANUM", group="TeleOp")
 public class BackupMECHANUM extends LinearOpMode {
     private DcMotor frontLeft = null;
     private DcMotor frontRight = null;
@@ -32,12 +32,12 @@ public class BackupMECHANUM extends LinearOpMode {
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
-        
+
         elevator.setDirection(DcMotor.Direction.FORWARD);
-        
+
         leftServo.setDirection(CRServo.Direction.REVERSE);
         rightServo.setDirection(CRServo.Direction.FORWARD);
-        
+
         waitForStart();
 
         while (opModeIsActive()) {
@@ -51,7 +51,7 @@ public class BackupMECHANUM extends LinearOpMode {
             final double v2 = r * Math.sin(robotAngle) - rightX;
             final double v3 = r * Math.sin(robotAngle) + rightX;
             final double v4 = r * Math.cos(robotAngle) - rightX;
-            
+
             if(gamepad1.left_stick_y > 0.15 || gamepad1.left_stick_y < -0.15 || gamepad1.left_stick_x > 0.15 || gamepad1.left_stick_x < -0.15) {
                 frontLeft.setPower(0.75*v2);
                 frontRight.setPower(0.75*v1);
@@ -65,7 +65,7 @@ public class BackupMECHANUM extends LinearOpMode {
                 frontRight.setPower(-0.5);
                 backRight.setPower(-0.5);
             }
-          
+
             else if(gamepad1.right_bumper) {
                 frontLeft.setPower(-0.5);
                 backLeft.setPower(-0.5);
@@ -92,11 +92,13 @@ public class BackupMECHANUM extends LinearOpMode {
                 frontRight.setPower(0);
                 backRight.setPower(0);
             }
+            // Spins wheels out
             if(gamepad2.right_trigger > 0.15){
                 double servoPower = 0.5*gamepad2.right_trigger;
                 rightServo.setPower(servoPower);
                 leftServo.setPower(servoPower);
             }
+            // Spins wheels in
             else if(gamepad2.left_trigger > 0.15){
                 double servoPower = 0.5*gamepad2.left_trigger;
                 rightServo.setPower(-servoPower);
@@ -106,7 +108,7 @@ public class BackupMECHANUM extends LinearOpMode {
                 rightServo.setPower(0);
                 leftServo.setPower(0);
             }
-            
+
             if(gamepad2.right_stick_y > 0.15 || gamepad2.right_stick_y < -0.15){
                 elevPower=(gamepad2.right_stick_y);
             }
@@ -114,8 +116,8 @@ public class BackupMECHANUM extends LinearOpMode {
                 elevPower=0;
             }
             elevator.setPower(elevPower);
-            
-            
+
+
 
 
         }

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-@TeleOp(name="org.firstinspires.ftc.teamcode.MECHANUM", group="TeleOp")
+@TeleOp(name="MECHANUM", group="TeleOp")
 public class MECHANUM extends LinearOpMode {
     private DcMotor frontLeft = null;
     private DcMotor frontRight = null;

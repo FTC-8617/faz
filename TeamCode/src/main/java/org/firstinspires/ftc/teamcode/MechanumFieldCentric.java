@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 
-@TeleOp(name="org.firstinspires.ftc.teamcode.MechanumFieldCentric", group="TeleOp")
+@TeleOp(name="MechanumFieldCentric(doesn't work)", group="TeleOp")
 public class MechanumFieldCentric extends LinearOpMode {
     private DcMotor frontLeft = null;
     private DcMotor frontRight = null;

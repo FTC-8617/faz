@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name = "org.firstinspires.ftc.teamcode.FazRight", preselectTeleOp = "org.firstinspires.ftc.teamcode.FazRight")
+@Autonomous(name = "FazRight(old)", preselectTeleOp = "org.firstinspires.ftc.teamcode.FazRight")
 public class FazRight extends LinearOpMode {
 
   private DcMotor BackrightAsDcMotor = null;

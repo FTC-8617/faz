@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.ArrayList;
 
-@Autonomous
+@Autonomous(name = "AutoCameraRight", preselectTeleOp = "MECHANUM")
 public class AutoCameraRight extends LinearOpMode
 {
     OpenCvCamera camera;
@@ -79,6 +79,9 @@ public class AutoCameraRight extends LinearOpMode
         leftServo = hardwareMap.crservo.get("left");
         rightServo = hardwareMap.crservo.get("right");
         elevator = hardwareMap.dcMotor.get("elevator");
+
+        leftServo.setDirection(CRServo.Direction.FORWARD);
+        rightServo.setDirection(CRServo.Direction.REVERSE);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -162,6 +165,7 @@ public class AutoCameraRight extends LinearOpMode
             telemetry.update();
         }
         /* Actually do something useful */
+        in(0.1);
         if (tagOfInterest == null) {
             telemetry.addLine("ain't nothing here");
             telemetry.update();
