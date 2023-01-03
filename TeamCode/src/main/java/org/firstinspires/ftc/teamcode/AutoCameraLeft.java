@@ -170,7 +170,7 @@ public class AutoCameraLeft extends LinearOpMode
             telemetry.addLine("ain't nothing here");
             telemetry.update();
         } else if (tagOfInterest.id == left) {
-            crabRight(1850, 0.3);
+            crabRight(1530, 0.3);
             sleep(3000);
             forward(1100, 0.3);
             sleep(2000);
@@ -178,17 +178,18 @@ public class AutoCameraLeft extends LinearOpMode
             sleep(3000);
             forward(100, 0.25);
             forward(175, 0.15);
+            sleep(650);
             drop(1.0);
             sleep(2000);
-            forward(-250,0.25);
+            backward(100,0.25);
+            sleep('2000);
+            elevatorDown(3000, 0.50);
             sleep(2000);
-            elevatorDown(4000, 0.50);
-            sleep(4000);
-            crabLeft(4500, 0.3);
+            crabLeft(3125, 0.5);
             sleep(3000);
             telemetry.update();
         } else if (tagOfInterest.id == middle) {
-            crabRight(1850, 0.3);
+            crabRight(1530, 0.3);
             sleep(3000);
             forward(1100, 0.3);
             sleep(2000);
@@ -196,18 +197,18 @@ public class AutoCameraLeft extends LinearOpMode
             sleep(3000);
             forward(100, 0.25);
             forward(175, 0.15);
+            sleep(650);
             drop(1.0);
             sleep(2000);
-            forward(-250,0.25);
+            backward(100,0.25);
             sleep(2000);
-            elevatorDown(4000, 0.50);
-            sleep(4000);
-            crabLeft(1700, 0.3);
+            elevatorDown(3000, 0.50);
+            sleep(2000);
+            crabLeft(1725, 0.5);
             sleep(3000);
-            //requestOpModeStop();
             telemetry.update();
         } else {
-            crabRight(1850, 0.3);
+            crabRight(1530, 0.3);
             sleep(3000);
             forward(1100, 0.3);
             sleep(2000);
@@ -215,13 +216,14 @@ public class AutoCameraLeft extends LinearOpMode
             sleep(3000);
             forward(100, 0.25);
             forward(175, 0.15);
+            sleep(650);
             drop(1.0);
             sleep(2000);
-            forward(-250,0.25);
+            backward(100,0.25);
             sleep(2000);
-            elevatorDown(4000, 0.50);
-            sleep(4000);
-            crabLeft(750, 0.3);
+            elevatorDown(3000, 0.5);
+            sleep(2000);
+            crabLeft(650, 0.5);
             sleep(3000);
             telemetry.update();
         }
