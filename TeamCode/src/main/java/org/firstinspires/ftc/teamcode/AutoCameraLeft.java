@@ -182,7 +182,7 @@ public class AutoCameraLeft extends LinearOpMode
             drop(1.0);
             sleep(2000);
             backward(100,0.25);
-            sleep('2000);
+            sleep(2000);
             elevatorDown(3000, 0.50);
             sleep(2000);
             crabLeft(3125, 0.5);
