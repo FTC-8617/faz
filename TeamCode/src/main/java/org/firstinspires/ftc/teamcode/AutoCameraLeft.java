@@ -170,9 +170,9 @@ public class AutoCameraLeft extends LinearOpMode
             telemetry.addLine("ain't nothing here");
             telemetry.update();
         } else if (tagOfInterest.id == left) {
-            crabRight(1530, 0.3);
-            sleep(3000);
-            forward(1100, 0.3);
+            crabRight(2000, 0.3);
+            sleep(4000);
+            forward(1200, 0.3);
             sleep(2000);
             elevatorUp(4000, 0.75);
             sleep(3000);
@@ -189,9 +189,9 @@ public class AutoCameraLeft extends LinearOpMode
             sleep(3000);
             telemetry.update();
         } else if (tagOfInterest.id == middle) {
-            crabRight(1530, 0.3);
-            sleep(3000);
-            forward(1100, 0.3);
+            crabRight(2000, 0.3);
+            sleep(4000);
+            forward(1200, 0.3);
             sleep(2000);
             elevatorUp(4000, 0.75);
             sleep(3000);
@@ -208,10 +208,10 @@ public class AutoCameraLeft extends LinearOpMode
             sleep(3000);
             telemetry.update();
         } else {
-            crabRight(1530, 0.3);
+            crabRight(2000, 0.3);
+            sleep(4000);
+            forward(1200, 0.3);
             sleep(3000);
-            forward(1100, 0.3);
-            sleep(2000);
             elevatorUp(4000, 0.75);
             sleep(3000);
             forward(100, 0.25);
