@@ -30,13 +30,14 @@ public class MECHANUM extends LinearOpMode {
         rightServo = hardwareMap.crservo.get("right");
         elevator = hardwareMap.dcMotor.get("elevator");
 
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);/*fr4fl3bl1br2*/
         
         elevator.setDirection(DcMotor.Direction.FORWARD);
-        
+
         leftServo.setDirection(CRServo.Direction.REVERSE);
         rightServo.setDirection(CRServo.Direction.FORWARD);
+
         
         waitForStart();
 
@@ -47,44 +48,45 @@ public class MECHANUM extends LinearOpMode {
             //Finds the robot's angle from the raw values of the joystick
             double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
             double rightX = gamepad1.right_stick_x;
-            final double v1 = r * Math.cos(robotAngle) + rightX;
-            final double v2 = r * Math.sin(robotAngle) - rightX;
-            final double v3 = r * Math.sin(robotAngle) + rightX;
-            final double v4 = r * Math.cos(robotAngle) - rightX;
+            double v1 = r * Math.cos(robotAngle) - 0.3*rightX;
+            double v2 = r * Math.sin(robotAngle) + 0.3*rightX;
+            double v3 = r * Math.sin(robotAngle) - 0.3*rightX;
+            double v4 = r * Math.cos(robotAngle) + 0.3*rightX;
             
             if(gamepad1.left_stick_y > 0.15 || gamepad1.left_stick_y < -0.15 || gamepad1.left_stick_x > 0.15 || gamepad1.left_stick_x < -0.15) {
-                frontLeft.setPower(0.75*v2);
-                frontRight.setPower(0.75*v1);
-                backLeft.setPower(0.75*v4);
-                backRight.setPower(0.75*v3);
+
+                frontLeft.setPower(-v3);
+                frontRight.setPower(-v4);
+                backLeft.setPower(-v1);
+                backRight.setPower(-v2);
             }
 
             else if(gamepad1.left_bumper) {
-                frontLeft.setPower(0.5);
-                backLeft.setPower(0.5);
-                frontRight.setPower(-0.5);
-                backRight.setPower(-0.5);
+                frontLeft.setPower(-0.75);
+                backLeft.setPower(-0.75);
+                frontRight.setPower(0.75);
+                backRight.setPower(0.75);
             }
           
             else if(gamepad1.right_bumper) {
-                frontLeft.setPower(-0.5);
-                backLeft.setPower(-0.5);
-                frontRight.setPower(0.5);
-                backRight.setPower(0.5);
+                frontLeft.setPower(0.75);
+                backLeft.setPower(0.75);
+                frontRight.setPower(-0.75);
+                backRight.setPower(-0.75);
             }
-            else if(gamepad1.right_trigger > 0.15) {
+            else if(gamepad1.right_trigger > 0.05) {
                 double power = 0.5*gamepad1.right_trigger;
-                frontLeft.setPower(-power);
-                backLeft.setPower(-power);
-                frontRight.setPower(power);
-                backRight.setPower(power);
-            }
-            else if(gamepad1.left_trigger > 0.15) {
-                double power = 0.5*gamepad1.left_trigger;
                 frontLeft.setPower(power);
                 backLeft.setPower(power);
                 frontRight.setPower(-power);
                 backRight.setPower(-power);
+            }
+            else if(gamepad1.left_trigger > 0.05) {
+                double power = 0.5*gamepad1.left_trigger;
+                frontLeft.setPower(-power);
+                backLeft.setPower(-power);
+                frontRight.setPower(power);
+                backRight.setPower(power);
             }
             else {
                 frontLeft.setPower(0);
@@ -93,14 +95,14 @@ public class MECHANUM extends LinearOpMode {
                 backRight.setPower(0);
             }
             // Spins wheels out
-            if(gamepad2.right_trigger > 0.15){
-                double servoPower = 0.5*gamepad2.right_trigger;
+            if(gamepad2.right_trigger > 0.05){
+                double servoPower = 0.3*gamepad2.right_trigger;
                 rightServo.setPower(servoPower);
                 leftServo.setPower(servoPower);
             }
             // Spins wheels in
-            else if(gamepad2.left_trigger > 0.15){
-                double servoPower = 0.5*gamepad2.left_trigger;
+            else if(gamepad2.left_trigger > 0.05){
+                double servoPower = 0.33*gamepad2.left_trigger;
                 rightServo.setPower(-servoPower);
                 leftServo.setPower(-servoPower);
             }
@@ -112,6 +114,7 @@ public class MECHANUM extends LinearOpMode {
             if(gamepad2.right_stick_y > 0.15 || gamepad2.right_stick_y < -0.15){
                 elevPower=(gamepad2.right_stick_y);
             }
+
             else{
                 elevPower=0;
             }

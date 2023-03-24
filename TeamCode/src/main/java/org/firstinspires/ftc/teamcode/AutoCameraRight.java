@@ -19,10 +19,15 @@ package org.firstinspires.ftc.teamcode;/*
  * SOFTWARE.
  */
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -47,6 +52,10 @@ public class AutoCameraRight extends LinearOpMode
     private CRServo leftServo = null;
     private CRServo rightServo = null;
     private DcMotor elevator = null;
+
+    private BNO055IMU imu;
+
+    Orientation angles;
 
     static final double FEET_PER_METER = 3.28084;
 
@@ -82,6 +91,11 @@ public class AutoCameraRight extends LinearOpMode
 
         leftServo.setDirection(CRServo.Direction.FORWARD);
         rightServo.setDirection(CRServo.Direction.REVERSE);
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        imu=hardwareMap.get(BNO055IMU.class,"imu");
+        imu.initialize(parameters);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -165,68 +179,49 @@ public class AutoCameraRight extends LinearOpMode
             telemetry.update();
         }
         /* Actually do something useful */
-        in(0.1);
+        crabLeft(1000,0.75);
+        sleep(1700);
+        in(0.01);
+        center(0);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        telemetry.addLine("angle: "+angles.firstAngle);
+        telemetry.update();
+        elevatorUp(1000,1);
+        forward(2370,0.75);
+        sleep(1750);
+        center(0);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        telemetry.addLine("angle: "+angles.firstAngle);
+        telemetry.update();
+        //score high
+        elevatorUp(2000,1);
+        sleep(500);
+        crabRight(610,0.75);
+        sleep(1000);
+        elevatorDown(500,1);
+        sleep(300);
+        drop(1);
+        sleep(200);
+        elevatorUp(500,1);
+        sleep(500);
+        drop(0);
+        backwards(150,0.75);
+        sleep(600);
+        center(0);
         if (tagOfInterest == null) {
             telemetry.addLine("ain't nothing here");
             telemetry.update();
         } else if (tagOfInterest.id == left) {
-            crabLeft(1530, 0.3);
-            sleep(3000);
-            forward(1100, 0.3);
-            sleep(2000);
-            elevatorUp(4000, 0.75);
-            sleep(3000);
-            forward(100, 0.25);
-            forward(200, 0.15);
-            sleep(650);
-            drop(1.0);
-            sleep(2000);
-            backward(200,0.25);
-            sleep(2000);
-            elevatorDown(3000, 0.50);
-            sleep(2000);
-            crabRight(650, 0.5);
-            sleep(3000);
+            crabLeft(700,0.75);
             telemetry.update();
         } else if (tagOfInterest.id == middle) {
-            crabLeft(1530, 0.3);
-            sleep(3000);
-            forward(1100, 0.3);
-            sleep(2000);
-            elevatorUp(4000, 0.75);
-            sleep(3000);
-            forward(100, 0.25);
-            forward(200, 0.15);
-            sleep(650);
-            drop(1.0);
-            sleep(2000);
-            backward(200,0.25);
-            sleep(2000);
-            elevatorDown(3000, 0.50);
-            sleep(2000);
-            crabRight(1725, 0.5);
-            sleep(3000);
+            crabRight(700,0.75);
             telemetry.update();
-        } else {
-            crabLeft(1530, 0.3);
-            sleep(3000);
-            forward(1100, 0.3);
-            sleep(2000);
-            elevatorUp(4000, 0.75);
-            sleep(3000);
-            forward(100, 0.25);
-            forward(200, 0.15);
-            sleep(650);
-            drop(1.0);
-            sleep(2000);
-            backward(200,0.25);
-            sleep(2000);
-            elevatorDown(3000, 0.50);
-            sleep(2000);
-            crabRight(3125, 0.5);
-            sleep(3000);
+        } else{
+            crabRight(1750,0.75);
             telemetry.update();
         }
+        sleep(30000);
     }
 
 
@@ -241,6 +236,71 @@ public class AutoCameraRight extends LinearOpMode
         telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
         telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+    }
+    private void center(double angle){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double daAngle=angles.firstAngle;
+        while(daAngle>(angle+0.05) || daAngle<(angle-0.05)){
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            daAngle=angles.firstAngle;
+            if((daAngle-angle)>3 || (daAngle-angle)<-3){
+                centerOn(3,4,0.3,angle);
+            } else if((daAngle-angle)>1 || (daAngle-angle)<-1){
+                centerOn(1,3,0.2,angle);
+            } else if((daAngle-angle)>0.5 || (daAngle-angle)<-0.5){
+                centerOn(0.5,2,0.2,angle);
+            } else if ((daAngle - angle) > 0.3 || (daAngle - angle) < -0.3){
+                centerOn(0.3,1,0.2,angle);
+            } else if ((daAngle - angle) > 0.1 || (daAngle - angle) < -0.1) {
+                centerOn(0.1,1,0.1,angle);
+            } else if((daAngle - angle) > 0.05 || (daAngle - angle) < -0.05){
+                centerOn(0.05,1,0.1,angle);
+            }
+            else{
+                telemetry.addLine("ALIGNED?     "+daAngle);
+                telemetry.update();
+            }
+        }
+    }
+    private void centerOn(double accuracy, int distance, double power, double angle){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double daAngle=angles.firstAngle;
+        while(opModeIsActive() && (daAngle>(accuracy+angle) || daAngle<(angle-accuracy))) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            daAngle=angles.firstAngle;
+            if (daAngle >= (accuracy+angle)) {
+                turnright(distance, power);
+                sleep(20);
+            } else if (daAngle <= (angle-accuracy)) {
+                turnleft(distance, power);
+                sleep(20);
+            } else {
+                telemetry.addLine("We got a problem");
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                telemetry.addLine("angle: "+angles.firstAngle);
+                telemetry.update();
+            }
+        }
+    }
+    private void centerOnNinetyRight(double accuracy, int distance, double power) {
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double daAngle = angles.firstAngle;
+        while (opModeIsActive() && (daAngle > (-90+accuracy) || daAngle < (-90-accuracy))) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            daAngle = angles.firstAngle;
+            if (daAngle >= -90+accuracy) {
+                turnright(distance, power);
+                sleep(20);
+            } else if (daAngle <= (-90-accuracy)) {
+                turnleft(distance, power);
+                sleep(20);
+            } else {
+                telemetry.addLine("We got a problem");
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                telemetry.addLine("angle: "+angles.firstAngle);
+                telemetry.update();
+            }
+        }
     }
     private void elevatorUp(int distance, double power){
         elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -268,17 +328,6 @@ public class AutoCameraRight extends LinearOpMode
 
         elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-
-    private void drop(double power){
-        rightServo.setPower(power);
-        leftServo.setPower(power);
-    }
-
-    private void in(double power){
-        rightServo.setPower(-power);
-        leftServo.setPower(-power);
-    }
-
     private void crabLeft(int distance, double power){
         BackrightAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BackleftAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -374,9 +423,6 @@ public class AutoCameraRight extends LinearOpMode
         FrontleftAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    /**
-     * Describe this function...
-     */
     private void turnleft(int distance, double power) {
         BackrightAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BackleftAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -401,6 +447,38 @@ public class AutoCameraRight extends LinearOpMode
         FrontrightAsDcMotor.setPower(power);
         BackrightAsDcMotor.setPower(power);
         BackleftAsDcMotor.setPower(power);
+        FrontleftAsDcMotor.setPower(power);
+
+        BackrightAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackleftAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontrightAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontleftAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    private void backwards(int distance, double power) {
+        BackrightAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackleftAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FrontrightAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FrontleftAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        BackrightAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackleftAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontrightAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontleftAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        FrontleftAsDcMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        BackleftAsDcMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        FrontrightAsDcMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        BackrightAsDcMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        BackrightAsDcMotor.setTargetPosition(distance);
+        BackleftAsDcMotor.setTargetPosition(distance);
+        FrontrightAsDcMotor.setTargetPosition(distance);
+        FrontleftAsDcMotor.setTargetPosition(distance);
+
+        BackrightAsDcMotor.setPower(power);
+        BackleftAsDcMotor.setPower(power);
+        FrontrightAsDcMotor.setPower(power);
         FrontleftAsDcMotor.setPower(power);
 
         BackrightAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -441,39 +519,16 @@ public class AutoCameraRight extends LinearOpMode
         FrontleftAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    /**
-     * Describe this function...
-     */
-    private void backward(int distance, double power) {
-        BackrightAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackleftAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FrontrightAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FrontleftAsDcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        BackrightAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackleftAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontrightAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontleftAsDcMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        FrontrightAsDcMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        FrontleftAsDcMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        BackrightAsDcMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        BackleftAsDcMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        BackrightAsDcMotor.setTargetPosition(distance);
-        BackleftAsDcMotor.setTargetPosition(distance);
-        FrontrightAsDcMotor.setTargetPosition(distance);
-        FrontleftAsDcMotor.setTargetPosition(distance);
-
-        BackrightAsDcMotor.setPower(power);
-        BackleftAsDcMotor.setPower(power);
-        FrontrightAsDcMotor.setPower(power);
-        FrontleftAsDcMotor.setPower(power);
-
-        BackrightAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BackleftAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FrontrightAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FrontleftAsDcMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    private void drop(double power){
+        leftServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftServo.setPower(power);
+        rightServo.setPower(power);
+    }
+    private void in(double power){
+        rightServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftServo.setPower(power);
+        rightServo.setPower(power);
     }
 }
-
