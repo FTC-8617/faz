@@ -66,6 +66,7 @@ public class FazRight extends LinearOpMode {
     elevator.setPower(power);
 
     elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
   }
   private void elevatorDown(int distance, double power){
     elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
