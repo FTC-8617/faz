@@ -37,17 +37,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
+import static bad_code.drive.DriveConstantsOld.MAX_ACCEL;
+import static bad_code.drive.DriveConstantsOld.MAX_ANG_ACCEL;
+import static bad_code.drive.DriveConstantsOld.MAX_ANG_VEL;
+import static bad_code.drive.DriveConstantsOld.MAX_VEL;
+import static bad_code.drive.DriveConstantsOld.MOTOR_VELO_PID;
+import static bad_code.drive.DriveConstantsOld.RUN_USING_ENCODER;
+import static bad_code.drive.DriveConstantsOld.TRACK_WIDTH;
+import static bad_code.drive.DriveConstantsOld.encoderTicksToInches;
+import static bad_code.drive.DriveConstantsOld.kA;
+import static bad_code.drive.DriveConstantsOld.kStatic;
+import static bad_code.drive.DriveConstantsOld.kV;
+
+import bad_code.drive.DriveConstantsOld;
+import bad_code.drive.TwoWheelTrackingLocalizer;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
@@ -96,7 +99,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+                DriveConstantsOld.LOGO_FACING_DIR, DriveConstantsOld.USB_FACING_DIR));
         imu.initialize(parameters);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "front left");
