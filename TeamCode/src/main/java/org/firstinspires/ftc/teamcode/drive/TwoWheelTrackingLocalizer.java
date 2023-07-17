@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import static bad_code.drive.TwoWheelTrackingLocalizer.X_MULTIPLIER;
+import static bad_code.drive.TwoWheelTrackingLocalizer.Y_MULTIPLIER;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -41,8 +44,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     public static double PARALLEL_X = -2; // X is the up and down direction
     public static double PARALLEL_Y = -3; // Y is the strafe direction
 
-    public static double PERPENDICULAR_X = 0;
-    public static double PERPENDICULAR_Y = 0;
+    public static double PERPENDICULAR_X = 1;
+    public static double PERPENDICULAR_Y = 1;
 
     // Parallel/Perpendicular to the forward axis
     // Parallel wheel is parallel to the forward axis
@@ -83,8 +86,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     @Override
     public List<Double> getWheelPositions() {
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getCurrentPosition()),
-                encoderTicksToInches(perpendicularEncoder.getCurrentPosition())
+                encoderTicksToInches(parallelEncoder.getCurrentPosition()) * X_MULTIPLIER,
+                encoderTicksToInches(perpendicularEncoder.getCurrentPosition()) * Y_MULTIPLIER
         );
     }
 
