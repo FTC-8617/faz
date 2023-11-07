@@ -17,8 +17,8 @@ public class MRHIM extends LinearOpMode {
     private CRServo slopeServo = null; //CH
     private DcMotor elevator = null; //EH
     private DcMotor intake = null; //EH
-    //private DcMotor actuator = null; [EH]
-    //private CRServo drone = null; [CH]
+    private DcMotor actuator = null; //EH
+    private CRServo drone = null; //CH
     private final double driveAdjuster = 1;
     double  elevPower = 0;
     @Override
@@ -35,8 +35,8 @@ public class MRHIM extends LinearOpMode {
         slopeServo = hardwareMap.crservo.get("slopeServo");
         elevator = hardwareMap.dcMotor.get("elevator");
         intake = hardwareMap.dcMotor.get("intake");
-        //actuator = hardwareMap.dcMotor.get("actuator");
-        //drone = hardwareMap.crservo.get("drone");
+        actuator = hardwareMap.dcMotor.get("actuator");
+        drone = hardwareMap.crservo.get("drone");
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
@@ -52,6 +52,9 @@ public class MRHIM extends LinearOpMode {
 
         boolean goingOut = false;
         boolean goingIn = false;
+        boolean goingUp = false;
+        boolean goingDown = false;
+        boolean launching = false;
 
         while (opModeIsActive()) {
 
@@ -142,11 +145,11 @@ public class MRHIM extends LinearOpMode {
                 slopeServo.setPower(0);
             }
 
-            //Claw in
+            //Claw in (bucket)
             if(gamepad2.left_bumper){
                 clawServo.setPower(100);
             }
-            //Claw out
+            //Claw out (bucket)
             if(gamepad2.right_bumper){
                 clawServo.setPower(-100);
             }
@@ -165,6 +168,7 @@ public class MRHIM extends LinearOpMode {
             //Claw in
             if(gamepad2.triangle){
                 goingOut = !goingOut;
+                goingIn = false;
                 if(goingOut){
                     clawServo.setPower(100);
                 }
@@ -175,11 +179,47 @@ public class MRHIM extends LinearOpMode {
             //Claw out
             if(gamepad2.circle){
                 goingIn = !goingIn;
+                goingOut = false;
                 if(goingIn){
                     clawServo.setPower(-100);
                 }
                 else{
                     clawServo.setPower(0);
+                }
+            }
+
+            //Actuator up
+            if(gamepad2.dpad_up){
+                goingUp = !goingUp;
+                goingDown = false;
+                if(goingUp){
+                    actuator.setPower(100);
+                }
+                else{
+                    actuator.setPower(0);
+                }
+            }
+
+            //Actuator down
+            if(gamepad2.dpad_down){
+                goingDown = !goingDown;
+                goingUp = false;
+                if(goingDown){
+                    actuator.setPower(-100);
+                }
+                else{
+                    actuator.setPower(0);
+                }
+            }
+
+            //Drone launching
+            if(gamepad2.dpad_right){
+                launching = !launching;
+                if(launching){
+                    drone.setPower(100);
+                }
+                else{
+                    drone.setPower(0);
                 }
             }
         }
