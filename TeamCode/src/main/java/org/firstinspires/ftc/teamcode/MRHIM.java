@@ -226,7 +226,7 @@ public class MRHIM extends LinearOpMode {
                 }
             }
 
-            if(gamepad2.dpad_left){
+            /*if(gamepad2.dpad_left){
                 increasing = !increasing;
                 if(increasing)
                 {
@@ -235,6 +235,19 @@ public class MRHIM extends LinearOpMode {
                 else{
                     increaser.setPower(100);
                 }
+            }*/
+            //intake forward/backward
+            if(gamepad2.left_stick_y > 0.15 || gamepad2.left_stick_y < -0.15){
+                actuator.setPower(-gamepad2.left_stick_y / 2);
+            }
+            else{
+                actuator.setPower(0);
+            }
+            if(gamepad2.right_stick_y > 0.15 || gamepad2.right_stick_y < -0.15){
+                increaser.setPower(-gamepad2.right_stick_y);
+            }
+            else{
+                increaser.setPower(0);
             }
         }
     }
