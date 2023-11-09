@@ -19,6 +19,7 @@ public class MRHIM extends LinearOpMode {
     private DcMotor intake = null; //EH
     private DcMotor actuator = null; //EH
     private CRServo drone = null; //CH
+    private DcMotor increaser = null; //EH
     private final double driveAdjuster = 1;
     double  elevPower = 0;
     @Override
@@ -37,6 +38,7 @@ public class MRHIM extends LinearOpMode {
         intake = hardwareMap.dcMotor.get("intake");
         actuator = hardwareMap.dcMotor.get("actuator");
         drone = hardwareMap.crservo.get("drone");
+        increaser = hardwareMap.dcMotor.get("increaser");
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
@@ -55,6 +57,7 @@ public class MRHIM extends LinearOpMode {
         boolean goingUp = false;
         boolean goingDown = false;
         boolean launching = false;
+        boolean increasing = false;
 
         while (opModeIsActive()) {
 
@@ -220,6 +223,17 @@ public class MRHIM extends LinearOpMode {
                 }
                 else{
                     drone.setPower(0);
+                }
+            }
+
+            if(gamepad2.dpad_left){
+                increasing = !increasing;
+                if(increasing)
+                {
+                    increaser.setPower(100);
+                }
+                else{
+                    increaser.setPower(100);
                 }
             }
         }
