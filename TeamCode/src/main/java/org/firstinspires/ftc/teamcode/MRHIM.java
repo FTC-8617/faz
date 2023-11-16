@@ -59,6 +59,13 @@ public class MRHIM extends LinearOpMode {
         boolean launching = false;
         boolean increasing = false;
 
+        actuator.setPower(50);
+        sleep(1000);
+        actuator.setPower(25);
+        while(!opModeIsActive()) {
+            sleep(100);
+        }
+
         while (opModeIsActive()) {
 
             //Finds the hypotenuse of the triangle created by the two joystick values. Used to find the absoulte direction to go in.
@@ -151,10 +158,12 @@ public class MRHIM extends LinearOpMode {
             //Claw in (bucket)
             if(gamepad2.left_bumper){
                 clawServo.setPower(100);
-            }
-            //Claw out (bucket)
-            if(gamepad2.right_bumper){
+            }//Claw out (bucket)
+            else if(gamepad2.right_bumper){
                 clawServo.setPower(-100);
+            }
+            else{
+                clawServo.setPower(0);
             }
 
             //Intake 100% forward
